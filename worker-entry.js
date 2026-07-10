@@ -1,5 +1,3 @@
-import edgeTunnel from './_worker.js';
-
 const fallbackHtml = `<!doctype html>
 <html lang="en">
 <head>
@@ -8,7 +6,6 @@ const fallbackHtml = `<!doctype html>
   <title>Welcome to nginx!</title>
   <style>
     body{width:35em;margin:4rem auto;font-family:Tahoma,Verdana,Arial,sans-serif;line-height:1.5}
-    code{background:#f4f4f4;padding:.1rem .3rem}
   </style>
 </head>
 <body>
@@ -21,6 +18,7 @@ const fallbackHtml = `<!doctype html>
 export default {
   async fetch(request, env, ctx) {
     try {
+      const edgeTunnel = (await import('./_worker.js')).default;
       return await edgeTunnel.fetch(request, env, ctx);
     } catch (error) {
       console.error('EdgeTunnel request failed', error?.stack || error?.message || String(error));
