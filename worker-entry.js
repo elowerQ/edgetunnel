@@ -1,4 +1,4 @@
-const fallbackHtml = `<!doctype html>
+const page = `<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -10,33 +10,19 @@ const fallbackHtml = `<!doctype html>
 </head>
 <body>
   <h1>Welcome to nginx!</h1>
-  <p>If you see this page, the web server is successfully installed and working.</p>
+  <p>If you see this page, the nginx web server is successfully installed and working.</p>
   <p><em>Thank you for using nginx.</em></p>
 </body>
 </html>`;
 
 export default {
-  async fetch(request, env, ctx) {
-    try {
-      const edgeTunnel = (await import('./_worker.js')).default;
-      return await edgeTunnel.fetch(request, env, ctx);
-    } catch (error) {
-      console.error('EdgeTunnel request failed', error?.stack || error?.message || String(error));
-
-      const upgrade = (request.headers.get('Upgrade') || '').toLowerCase();
-      const acceptsHtml = (request.headers.get('Accept') || '').includes('text/html');
-      if (request.method === 'GET' && upgrade !== 'websocket' && acceptsHtml) {
-        return new Response(fallbackHtml, {
-          status: 200,
-          headers: {
-            'Content-Type': 'text/html; charset=UTF-8',
-            'Cache-Control': 'no-store',
-            'X-EdgeTunnel-Fallback': '1',
-          },
-        });
-      }
-
-      throw error;
-    }
+  async fetch() {
+    return new Response(page, {
+      status: 200,
+      headers: {
+        'Content-Type': 'text/html; charset=UTF-8',
+        'Cache-Control': 'no-store',
+      },
+    });
   },
 };
