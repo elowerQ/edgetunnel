@@ -1,5 +1,5 @@
 name = "edgetunnel"
-main = "worker-entry.js"
+main = "_worker.js"
 compatibility_date = "2026-07-09"
 keep_vars = true
 
